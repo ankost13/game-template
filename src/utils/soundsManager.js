@@ -8,6 +8,8 @@ export class SoundsManager {
         return new Promise((resolve) => {
             this.sounds = [];
             let downloadSounds = 0;
+            if (!soundsData) resolve();
+
             soundsData.forEach((item) => {
                 const sound = new Howl({
                     ...item,
