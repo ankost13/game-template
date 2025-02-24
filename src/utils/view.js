@@ -3,8 +3,9 @@ import {GLOBAL_EMITTER} from "./eventEmitter";
 import {SoundsManager} from "./soundsManager";
 
 export class View extends Container {
-    constructor(parent) {
+    constructor(parent, resizeData) {
         super();
+        this.size = resizeData;
         parent.addChild(this);
 
         this.initEmitter();
@@ -21,5 +22,17 @@ export class View extends Container {
 
     initSoundsManager() {
         this.soundsManager = SoundsManager.getInstance();
+    }
+
+    onResize(size) {
+        this.size = size;
+    }
+
+    isLandscape() {
+        return this.size.width > this.size.height
+    }
+
+    isMobile() {
+        return /Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent);
     }
 }
