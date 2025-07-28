@@ -4,6 +4,9 @@ import {GamePreloaderMediator} from "../modules/preloader/mediator";
 import {PreloaderView} from "../modules/preloader/view";
 import {GameMediator} from "./mediator";
 import {SoundsManager} from "../utils/soundsManager";
+import {AssetLoader} from "../utils/loader";
+import {BgView} from "../modules/bg/bgView";
+import {BgMediator} from "../modules/bg/bgMediator";
 
 export class App extends Application {
 
@@ -21,15 +24,15 @@ export class App extends Application {
 
         this.gameMediator = new GameMediator();
         this.gameMediator.resourcesLoaded();
+
+        this.registerBg();
     }
 
     async loadAssets() {
-        if (!Object.keys(manifest.bundles[0]).length) return;
-
-        await Assets.init({manifest});
-        for (const bundle of manifest.bundles) {
-            await Assets.loadBundle(bundle.name);
-        }
+        const loader = new AssetLoader()
+        window.loader = loader;
+        //await loader.loadPreloaderAssets(manifest);
+        await loader.loadAssets(manifest);
     }
 
     registerPreloader() {
@@ -37,6 +40,13 @@ export class App extends Application {
         const parent = new Container();
         this.stage.addChild(parent);
         mediator.initView(PreloaderView, parent);
+    }
+
+    registerBg() {
+        const mediator = new BgMediator();
+        const parent = new Container();
+        this.stage.addChild(parent);
+        mediator.initView(BgView, parent);
     }
 
 
